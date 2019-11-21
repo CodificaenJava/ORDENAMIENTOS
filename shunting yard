@@ -1,0 +1,213 @@
+import java.util.Stack;
+//import shuntingyard.stack;
+
+import java.util.Scanner;
+public class Main {
+     public static void main(String[] args){
+    Scanner scanner = new Scanner(System.in);
+       
+       String expresion = scanner.next();//esto va a leer la variable
+      
+       
+       System.out.println(expresion);//imprime la expresion
+       
+       ShuntingYard sy = new ShuntingYard ();//algo del tipo 
+       sy.evalua(expresion);//llamamos al metodo
+}
+}
+public class NodoQueue {//cola
+    char dato;
+    NodoQueue siguiente;
+    NodoQueue anterior;
+}
+public class NodoStack {//pila
+     char dato;
+    NodoStack siguiente;
+    
+}
+import java.util.Scanner;
+import java.util.Stack;
+//import shuntingyard.stack;
+public class ShuntingYard {
+     queue StringtoChar(String string){// cadena de caracteres
+        queue cola = new queue ();//algo del tipo
+        for (int i = 0; i < string.length(); i++) {//donde va a leer dependiendo del tamaño
+            cola.queue(string.charAt(i));//separa la cadena;
+        //  System.out.println(string.charAt(i));//separa la cadena;
+          //  cola.queue(string.charAt(i));//inserta en la cola cada caracter
+        }
+        return cola;//retorna a la cola 
+    }
+    
+    boolean isLetra(char caracter){//saber si es una letra y entra a la pila
+             switch (caracter){
+                 case '+':
+                     return false;
+                 case '-':
+                     return false;
+                 case '*':
+                     return false;
+                 case '/':
+                     return false;
+                 case '^':
+                     return false;
+                 case '(':
+                     return false;
+                 case ')':
+                    return false;
+                 default:
+                     return true;
+             }
+    }
+    
+    int peso(char signo){//dependiendo del peso del signo
+         switch (signo){
+                 case '+':
+                 case '-':
+                    return 1;
+                 case '*':
+                 case '/':
+                    return 2;
+                 case '^':
+                    return 3;
+                 case '(':
+                    return 4;
+                 case ')':
+                    return 0;
+                 default: 
+                    return -1;
+             }
+    }
+    
+    boolean isAfueraMayorQueDentro(char dentro,char fuera){// saber si el que va a entrar tiene mas prioridad
+        return peso(fuera)>peso(dentro);
+    }
+    
+    void evalua(String expresion){//proceso de pilas y colas
+         queue entrada = StringtoChar(expresion);//entrada cola
+         queue salida = new queue();//salida de la cola
+         stack pila = new stack();//pila
+         
+         char caracter;
+         
+         while((caracter = entrada.dequeue ())!=0){
+            if(isLetra(caracter)){//si es una letra
+            
+                salida.queue(caracter); //inserta a la cola de salida  
+            }else{
+                if(pila.ispilavacia()){//si la pila está vacía
+                    pila.push(caracter);//inserta el caracter
+                }else{
+                    if(peso(caracter) == 0){
+                        char c;
+                        while((c=pila.pop())!= '('){
+                           salida.queue(c);
+                           }
+                    }else{//si es un signo
+                    char signo = pila.pop();
+                    if(signo == '('){
+                        pila.push(signo);
+                        pila.push(caracter);
+                    }else 
+                    if(isAfueraMayorQueDentro(signo,caracter)){
+                        pila.push(signo);
+                        pila.push(caracter);
+                    }else{
+                        salida.queue(signo);
+                        pila.push(caracter);
+                    } 
+                  }
+                }
+            }
+         }
+        //System.out.println();
+        while((caracter=pila.pop())!= 0){//mientras que sacar de la pila es diferente de cero
+            salida.queue(caracter);
+        }
+        
+        while((caracter=salida.dequeue())!=0){ // a la salida insertar los caracteres
+            System.out.print(caracter);
+        }
+         System.out.println();
+       }
+}
+public class queue {
+      NodoQueue inicio = null;
+    NodoQueue fin = null;
+    
+    void queue(char dato){
+        NodoQueue nuevo = new NodoQueue();
+        nuevo.dato = dato;
+        nuevo.siguiente = null;
+        nuevo.anterior = null;
+        if (inicio != null){
+            inicio.anterior = nuevo;
+            nuevo.siguiente = inicio;
+            inicio = nuevo;
+        }else{
+            inicio = nuevo;
+            fin = nuevo;
+        }
+      
+    }
+    
+    char dequeue(){
+        if (fin != null){
+            NodoQueue aux = fin;
+         //   System.out.println(aux.dato);
+        if(inicio == fin){
+                inicio = null;
+                fin = null;
+            }else{
+                fin.siguiente = null;
+                fin = fin.anterior;
+//                fin.siguiente = null;
+       
+        }
+            aux.siguiente = null;
+            aux.anterior = null;
+           // System.out.println(aux.dato);
+            
+        return aux.dato;
+            
+        } else
+        return 0;
+    }
+    
+}
+public class stack {
+    NodoStack inicio;
+    void push(char dato){
+        NodoStack nuevo=new NodoStack();
+        nuevo.dato = dato;
+        nuevo.siguiente = null;
+        if(inicio == null){
+            inicio = nuevo;
+        }else {
+            nuevo.siguiente = inicio;
+            inicio=nuevo;
+        }
+    }
+    char pop(){
+        if (inicio!= null){
+        NodoStack aux = inicio;
+        inicio = inicio.siguiente;
+        aux.siguiente = null;
+        return aux.dato;
+        }else{
+        return 0;}
+    }
+    
+    Boolean ispilavacia(){
+        return inicio==null;
+    }
+    
+    void imprimir(){
+        NodoStack aux=inicio;
+        while (aux!=null){
+            System.out.println(aux.dato);
+            aux=aux.siguiente;
+        }
+    }
+//sacar todo lo de la pila 
+}
