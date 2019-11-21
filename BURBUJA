@@ -1,0 +1,25 @@
+void ordenarBurbuja(){
+        Nodo e = inicio;
+        while (e != null){
+            Nodo i = e.siguiente;
+            while (i != null){
+                if(e.dato > i.dato){
+                    int aux = e.dato;
+                    e.dato = i.dato;
+                    i.dato = aux;
+                }
+                i = i.siguiente;
+            }
+            e = e.siguiente;
+        }
+        recorrer();
+    }
+     void eliminarInicio(){
+        if((inicio != fin)&&(fin != null)){
+            Nodo aux = inicio;
+            aux = aux.siguiente;
+            aux.anterior = null;
+            inicio.siguiente=null;
+            inicio = aux;
+        }
+    }
